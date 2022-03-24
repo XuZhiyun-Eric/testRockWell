@@ -1,44 +1,109 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GRAPH2 } from './echartsAggregate';
 import { HttpClient } from "@angular/common/http"
 declare const echarts: any;
 
 @Component({
-  selector: 'e-charts',
-  templateUrl: './echarts.component.html',
-  styleUrls: ['./echarts.component.less']
+  selector: 'echart-demo',
+  templateUrl: './echartDemo.component.html',
+  styleUrls: ['./echartDemo.component.less']
 })
-export class EChartsComponent implements OnInit {
+export class EchartDemoComponent implements OnInit {
 
-  lineData: any = [200,300,400,500,600,700,800];
-  
-  @ViewChild('echartsTest1', { static: true }) echartsTest1: any;
-  @ViewChild('echartsTest2', { static: true }) echartsTest2: any;
-  @ViewChild('echartsTest3', { static: true }) echartsTest3: any;
-  @ViewChild('echartsTest4', { static: true }) echartsTest4: any;
-
-
-  GRAPH1:any = {
-    xAxis: {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  data: any = [
+    {
+      value: 20,
+      name: 'Perfect',
+      title: {
+        offsetCenter: ['0%', '-30%']
+      },
+      detail: {
+        valueAnimation: true,
+        offsetCenter: ['0%', '-20%']
+      }
     },
-    yAxis: {
-        type: 'value'
+    {
+      value: 40,
+      name: 'Good',
+      title: {
+        offsetCenter: ['0%', '0%']
+      },
+      detail: {
+        valueAnimation: true,
+        offsetCenter: ['0%', '10%']
+      }
     },
-    series: [{
-        data: this.lineData,
-        type: 'line',
-        smooth: true
-    }]
-  };
+    {
+      value: 60,
+      name: 'Commonly',
+      title: {
+        offsetCenter: ['0%', '30%']
+      },
+      detail: {
+        valueAnimation: true,
+        offsetCenter: ['0%', '40%']
+      }
+    }
+  ]
 
-  GRAPH3:any =  {
+  scoringRingData: any = {
+    series: [
+      {
+        type: 'gauge',
+        startAngle: 90,
+        endAngle: -270,
+        pointer: {
+          show: false
+        },
+        progress: {
+          show: true,
+          overlap: false,
+          roundCap: true,
+          clip: false,
+          itemStyle: {
+            borderWidth: 1,
+            borderColor: '#464646'
+          }
+        },
+        axisLine: {
+          lineStyle: {
+            width: 40
+          }
+        },
+        splitLine: {
+          show: false,
+          distance: 0,
+          length: 10
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel: {
+          show: false,
+          distance: 50
+        },
+        data: [],
+        title: {
+          fontSize: 14
+        },
+        detail: {
+          width: 50,
+          height: 14,
+          fontSize: 14,
+          color: 'auto',
+          borderColor: 'auto',
+          borderRadius: 20,
+          borderWidth: 1,
+          formatter: '{value}%'
+        }
+      }
+    ]
+  }
+
+  stackData: any = {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
-        // Use axis to trigger tooltip
-        type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+        type: 'shadow'
       }
     },
     legend: {},
@@ -117,9 +182,9 @@ export class EChartsComponent implements OnInit {
         data: [820, 832, 901, 934, 1290, 1330, 1320]
       }
     ]
-  };
+  }
 
-  GRAPH4:any =  {
+  tempDashboardData: any = {
     series: [
       {
         type: 'gauge',
@@ -184,74 +249,18 @@ export class EChartsComponent implements OnInit {
         },
         data: [
           {
-            value: 52,
-            name: '老八'
+            value: 38.22
           }
         ]
-      },
-      // {
-      //   type: 'gauge',
-      //   center: ['50%', '60%'],
-      //   startAngle: 200,
-      //   endAngle: -20,
-      //   min: 0,
-      //   max: 60,
-      //   itemStyle: {
-      //     color: '#FD7347'
-      //   },
-      //   progress: {
-      //     show: true,
-      //     width: 8
-      //   },
-      //   pointer: {
-      //     show: false
-      //   },
-      //   axisLine: {
-      //     show: false
-      //   },
-      //   axisTick: {
-      //     show: false
-      //   },
-      //   splitLine: {
-      //     show: false
-      //   },
-      //   axisLabel: {
-      //     show: false
-      //   },
-      //   detail: {
-      //     show: false
-      //   },
-      //   data: [
-      //     {
-      //       value: 20
-      //     }
-      //   ]
-      // }
+      }
     ]
   }
 
-  testHttpData: any;
-
-  constructor(private http:HttpClient) {}
+  constructor(
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
-    echarts.init(this.echartsTest2.nativeElement).setOption(GRAPH2);
-    echarts.init(this.echartsTest3.nativeElement).setOption(this.GRAPH3);
-    echarts.init(this.echartsTest4.nativeElement).setOption(this.GRAPH4);
-
-    this.http.get("https://www.baidu.com/").subscribe(res=>{ this.testHttpData = res })
-    console.log(this.testHttpData);
-  }
-
-  
-
-  chartsClick() {
-    console.log('仪表盘点击事件----------');
-  }
-
-  buttonClick() {
-    console.log('按钮点击事件-----------');
-    console.log(this.echartsTest1.nativeElement);
-    echarts.init(this.echartsTest1.nativeElement).setOption(this.GRAPH1);
+    this.scoringRingData.series[0].data = this.data;
   }
 }
